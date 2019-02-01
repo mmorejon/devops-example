@@ -1,10 +1,16 @@
 # Using official python runtime base image
 FROM python:3.7.2-alpine
 
+# Labels
+LABEL maintainer="Manuel Morejon"
+LABEL description="Flask entrypoint example."
+LABEL app="devops-example"
+LABEL language="python"
+
 # Set the application directory
 WORKDIR /app
 
-# install dependencies
+# Install dependencies
 RUN apk add curl
 
 # Install our requirements.txt
