@@ -1,0 +1,10 @@
+version: "3.6"
+
+services:
+  hello:
+    build: ./hello
+    command: python app.py
+    volumes:
+     - ./hello:/app
+    ports:
+      - "5000:80"
