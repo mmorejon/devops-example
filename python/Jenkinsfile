@@ -48,7 +48,7 @@ pipeline {
                 // virtual machine deployment
                 sh "docker-compose -H ${PYTHON_HOST} --project-name example -f docker-stack.yml up --detach --scale python=${env.INSTANCE_NUMBER} --remove-orphans"
                 // cluster deployment
-                withKubeConfig(credentialsId: CLUSTER_KUBERNETES ) {
+                withKubeConfig(credentialsId: 'CLUSTER_KUBERNETES' ) {
                     sh """
                         helm upgrade \
                             --install \
