@@ -8,8 +8,8 @@ pipeline {
         )
     }
     environment {
-        IMAGE_NAME = "mmorejon/devops-python"
-        IMAGE_NAME_BUILD = "${env.IMAGE_NAME}:${env.BUILD_NUMBER}"
+        IMAGE_NAME = "mmorejon/devops-python:${env.BRANCH_NAME}"
+        IMAGE_NAME_BUILD = "${env.IMAGE_NAME}-b${env.BUILD_NUMBER}"
     }
     options { 
         buildDiscarder(logRotator(numToKeepStr: NUM_BUILDS_TO_KEEP))
