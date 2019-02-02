@@ -27,7 +27,7 @@ pipeline {
         }
         stage('test') {
             steps {
-                sh "Without tests."
+                echo "Without tests."
             }
         }
         stage('publish') {
@@ -43,7 +43,7 @@ pipeline {
     }
     post {
         always {
-            sh "Send slack notification."
+            echo "Send slack notification."
         }
     }
 }
