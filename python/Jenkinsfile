@@ -45,7 +45,7 @@ pipeline {
         stage('deploy') {
             when { branch 'master' }
             steps {
-                sh "docker-compose -H ${PYTHON_HOST} -f docker-stack.yml up --detach --scale python=${env.INSTANCE_NUMBER} --remove-orphans"
+                sh "docker-compose -H ${PYTHON_HOST} --project-name example -f docker-stack.yml up --detach --scale python=${env.INSTANCE_NUMBER} --remove-orphans"
             }
         }
     }
