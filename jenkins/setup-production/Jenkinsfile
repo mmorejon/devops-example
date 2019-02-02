@@ -1,5 +1,10 @@
 pipeline {
     agent any
+    options { 
+        buildDiscarder(logRotator(numToKeepStr: NUM_BUILDS_TO_KEEP))
+        disableConcurrentBuilds()
+        timeout(time: NUM_MINUTES_TO_KEEP, unit: 'MINUTES')
+    }
     stages {
         stage('setup production') {
             steps {
