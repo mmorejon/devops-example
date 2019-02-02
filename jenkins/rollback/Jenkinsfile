@@ -7,7 +7,6 @@ pipeline {
     }
     stages {
         stage('rollback') {
-            when { branch 'master' }
             steps {
                 // cluster deployment
                 withKubeConfig(credentialsId: 'CLUSTER_KUBERNETES' ) {
