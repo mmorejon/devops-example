@@ -11,7 +11,7 @@ pipeline {
         IMAGE_NAME = "mmorejon/devops-python:${env.BRANCH_NAME}"
         IMAGE_NAME_BUILD = "${env.IMAGE_NAME}-b${env.BUILD_NUMBER}"
         TAG = "master"
-        INSTANCE_NUMBER = 3
+        INSTANCE_NUMBER = 2
     }
     options { 
         buildDiscarder(logRotator(numToKeepStr: NUM_BUILDS_TO_KEEP))
