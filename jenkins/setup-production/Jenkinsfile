@@ -1,0 +1,16 @@
+pipeline {
+    agent any
+    stages {
+        stage('setup production') {
+            steps {
+                ansiblePlaybook (
+                  colorized: true,
+                  limit: 'python',
+                  disableHostKeyChecking: true,
+                  inventory: 'ansible/inventory/hosts.yml',
+                  playbook: 'ansible/setup.yml'
+                )
+            }
+        }
+    }
+}
