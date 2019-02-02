@@ -1,0 +1,57 @@
+pipeline {
+    agent any
+    parameters {
+        booleanParam(
+            name: 'DOCKER_CACHE',
+            defaultValue: true, 
+            description: 'Define when to use the docker cache.'
+        )
+    }
+    environment {
+        IMAGE_NAME = 'devops-python'
+        IMAGE_NAME_BUILD = '${env.IMAGE_NAME}:${env.BUILD_NUMBER}'
+    }
+    options { 
+        buildDiscarder(logRotator(numToKeepStr: NUM_BUILDS_TO_KEEP))
+        disableConcurrentBuilds()
+        timeout(time: NUM_MINUTES_TO_KEEP, unit: 'MINUTES')
+    }
+    stages {
+        stage('build') {
+            steps {
+                checkout([
+                  $class: 'GitSCM', 
+                  branches: [[name: 'master']], 
+                  doGenerateSubmoduleConfigurations: false, 
+                  extensions: [], submoduleCfg: [], 
+                  userRemoteConfigs: [[url: 'https://github.com/mmorejon/devops-example.git']]
+                ])
+
+                sh "docker image build \
+                    ${params.DOCKER_CACHE ? '' : '--no-cache'} \
+                    --tag '${IMAGE_NAME}' \
+                    ./hello"
+            }
+        }
+        stage('test') {
+            steps {
+                sh "Without tests."
+            }
+        }
+        stage('publish') {
+            when { expression { return env.BRANCH_NAME == 'master' } }
+            steps {
+                withDockerRegistry(credentialsId: 'USER_MMOREJON', url: "https://index.docker.io/v1/") {
+                    sh "docker image push '${IMAGE_NAME}'"
+                    sh "docker image tag '${IMAGE_NAME}' '${IMAGE_NAME_BUILD}'"
+                    sh "docker image push '${IMAGE_NAME_BUILD}'"
+                }
+            }
+        }
+    }
+    post {
+        always {
+            sh "Send slack notification."
+        }
+    }
+}
