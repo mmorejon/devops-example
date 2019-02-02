@@ -1,0 +1,28 @@
+version: "3.6"
+services:
+  proxy:
+    image: traefik:1.7.6-alpine
+    restart: always
+    command:
+      - "--api"
+      - "--docker"
+      - "--docker.watch"
+    labels:
+      - "traefik.frontend.rule=Host:devops-monitor.mmorejon.io"
+      - "traefik.port=8080"
+    ports:
+      - target: 80
+        published: 80
+        protocol: tcp
+        mode: host
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+  python:
+    image: "mmorejon/devops-python:${TAG}"
+    restart: always
+    labels:
+      - "traefik.backend=python"
+      - "traefik.frontend.rule=Host:devops-python.mmorejon.io"
+      - "traefik.port=80"
