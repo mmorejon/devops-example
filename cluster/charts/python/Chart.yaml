@@ -1,0 +1,10 @@
+apiVersion: v1
+name: python
+version: 0.1.0
+appVersion: 0.1.0
+description: DevOps Python project.
+sources:
+- https://github.com/mmorejon/devops-example.git
+maintainers:
+- name: Manuel Morejon
+engine: gotpl
