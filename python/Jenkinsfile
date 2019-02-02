@@ -58,6 +58,8 @@ pipeline {
                             devops-python \
                             ./cluster/charts/python
                     """
+                    // check rollout status
+                    sh "kubectl rollout status deployment devops-python"
                 }
             }
         }
