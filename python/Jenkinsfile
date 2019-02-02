@@ -55,6 +55,7 @@ pipeline {
                             --recreate-pods \
                             -f ./cluster/charts/python/values.yaml \
                             --set imageTag=${TAG} \
+                            --set replicas=${INSTANCE_NUMBER} \
                             devops-python \
                             ./cluster/charts/python
                     """
