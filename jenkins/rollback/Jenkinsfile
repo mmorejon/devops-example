@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+    options { 
+        buildDiscarder(logRotator(numToKeepStr: NUM_BUILDS_TO_KEEP))
+        disableConcurrentBuilds()
+        timeout(time: NUM_MINUTES_TO_KEEP, unit: 'MINUTES')
+    }
+    stages {
+        stage('rollback') {
+            when { branch 'master' }
+            steps {
+                // cluster deployment
+                withKubeConfig(credentialsId: 'CLUSTER_KUBERNETES' ) {
+                    // rollback
+                    sh "kubectl rollout undo deployment devops-python"
+                    // check rollout status
+                    sh "kubectl rollout status deployment devops-python"
+                }
+            }
+        }
+    }
+    post {
+        always {
+            echo "Send slack notification."
+        }
+    }
+}
