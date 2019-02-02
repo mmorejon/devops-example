@@ -53,6 +53,7 @@ pipeline {
                         helm upgrade \
                             --install \
                             --recreate-pods \
+                            -f ./cluster/charts/python/values.yaml \
                             --set imageTag=${TAG} \
                             devops-python \
                             ./cluster/charts/python
