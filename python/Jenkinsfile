@@ -10,7 +10,7 @@ pipeline {
     environment {
         IMAGE_NAME = "mmorejon/devops-python:${env.BRANCH_NAME}"
         IMAGE_NAME_BUILD = "${env.IMAGE_NAME}-b${env.BUILD_NUMBER}"
-        TAG = "master"
+        TAG = "${env.BRANCH_NAME}-b${env.BUILD_NUMBER}"
         INSTANCE_NUMBER = 2
     }
     options { 
@@ -45,7 +45,19 @@ pipeline {
         stage('deploy') {
             when { branch 'master' }
             steps {
+                // virtual machine deployment
                 sh "docker-compose -H ${PYTHON_HOST} --project-name example -f docker-stack.yml up --detach --scale python=${env.INSTANCE_NUMBER} --remove-orphans"
+                // cluster deployment
+                withKubeConfig(credentialsId: CLUSTER_KUBERNETES ) {
+                    sh """
+                        helm upgrade \
+                            --install \
+                            --recreate-pods \
+                            --set imageTag=${TAG} \
+                            devops-python \
+                            ./cluster/charts/python
+                    """
+                }
             }
         }
     }
