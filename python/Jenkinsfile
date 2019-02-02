@@ -10,6 +10,8 @@ pipeline {
     environment {
         IMAGE_NAME = "mmorejon/devops-python:${env.BRANCH_NAME}"
         IMAGE_NAME_BUILD = "${env.IMAGE_NAME}-b${env.BUILD_NUMBER}"
+        TAG = "master"
+        INSTANCE_NUMBER = 2
     }
     options { 
         buildDiscarder(logRotator(numToKeepStr: NUM_BUILDS_TO_KEEP))
@@ -38,6 +40,12 @@ pipeline {
                     sh "docker image tag '${IMAGE_NAME}' '${IMAGE_NAME_BUILD}'"
                     sh "docker image push '${IMAGE_NAME_BUILD}'"
                 }
+            }
+        }
+        stage('deploy') {
+            when { branch 'master' }
+            steps {
+                sh "docker-compose -H ${PYTHON_HOST} -f docker-stack.yml up --detach --scale python=${env.INSTANCE_NUMBER} --remove-orphans"
             }
         }
     }
