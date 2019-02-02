@@ -12,6 +12,9 @@ RUN add-apt-repository \
 RUN apt-get update  -qq \
     && apt-get install docker-ce=18.06.1~ce~3-0~debian -y
 RUN usermod -aG docker jenkins
+# install docker compose
+RUN curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
+    chmod +x /usr/local/bin/docker-compose
 # install ansible
 RUN add-apt-repository \
     "deb http://ppa.launchpad.net/ansible/ansible/ubuntu bionic main"
