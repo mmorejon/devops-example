@@ -3,7 +3,7 @@ pipeline {
     parameters {
         booleanParam(
             name: 'DOCKER_CACHE',
-            defaultValue: true, 
+            defaultValue: true,
             description: 'Define when to use the docker cache.'
         )
     }
@@ -13,10 +13,10 @@ pipeline {
         TAG = "${env.BRANCH_NAME}-b${env.BUILD_NUMBER}"
         INSTANCE_NUMBER = 3
     }
-    options { 
-        buildDiscarder(logRotator(numToKeepStr: NUM_BUILDS_TO_KEEP))
+    options {
+        buildDiscarder(logRotator(numToKeepStr: 5 ))
         disableConcurrentBuilds()
-        timeout(time: NUM_MINUTES_TO_KEEP, unit: 'MINUTES')
+        timeout(time: 5, unit: 'MINUTES')
     }
     stages {
         stage('build') {
@@ -45,19 +45,16 @@ pipeline {
         stage('deploy') {
             when { branch 'master' }
             steps {
-                // virtual machine deployment
-                sh "docker-compose -H ${PYTHON_HOST} --project-name example -f docker-stack.yml up --detach --scale python=${env.INSTANCE_NUMBER} --remove-orphans"
                 // cluster deployment
-                withKubeConfig(credentialsId: 'CLUSTER_KUBERNETES' ) {
+                withKubeConfig(credentialsId: 'EXAMPLE_CLUSTER' ) {
                     sh """
                         helm upgrade \
                             --install \
-                            --recreate-pods \
-                            -f ./cluster/charts/python/values.yaml \
+                            -f ./cluster/example/values.yaml \
                             --set imageTag=${TAG} \
                             --set replicas=${INSTANCE_NUMBER} \
                             devops-python \
-                            ./cluster/charts/python
+                            ./cluster/example
                     """
                     // check rollout status
                     sh "kubectl rollout status deployment devops-python"
