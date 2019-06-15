@@ -1,0 +1,63 @@
+pipeline {
+    agent any
+    environment {
+        GIT_COMMIT_SHORT = sh(
+                script: "printf \$(git rev-parse --short ${GIT_COMMIT})",
+                returnStdout: true
+        )
+        IMAGE_TAG= "b-${GIT_COMMIT_SHORT}"
+        IMAGE_NAME = "mmorejon/devops-python:${IMAGE_TAG}"
+        INSTANCE_NUMBER = 3
+    }
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '5' ))
+        disableConcurrentBuilds()
+        timeout(time: 5, unit: 'MINUTES')
+    }
+    stages {
+        stage('build') {
+            steps {
+                sh "docker image build \
+                    ${params.DOCKER_CACHE ? '' : '--no-cache'} \
+                    --tag '${IMAGE_NAME}' \
+                    ./code"
+            }
+        }
+        stage('test') {
+            steps {
+                echo "Without tests."
+            }
+        }
+        stage('publish') {
+            steps {
+                withDockerRegistry(credentialsId: 'HUB_USER', url: "https://index.docker.io/v1/") {
+                    sh "docker image push '${IMAGE_NAME}'"
+                }
+            }
+        }
+        stage('deploy') {
+            // when { branch 'master' }
+            steps {
+                // cluster deployment
+                withKubeConfig(credentialsId: 'DO_CLUSTER' ) {
+                    sh """
+                        helm upgrade \
+                            --install \
+                            example \
+                            --set imageTag=${IMAGE_TAG} \
+                            --set replicas=${INSTANCE_NUMBER} \
+                            --namespace default \
+                            ./services/example
+                    """
+                    // check rollout status
+                    sh "kubectl -n default rollout status deployment example"
+                }
+            }
+        }
+    }
+    post {
+        always {
+            echo "Send slack notification."
+        }
+    }
+}

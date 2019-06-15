@@ -1,0 +1,24 @@
+# Python service values
+
+# Image
+image: mmorejon/devops-python
+imageTag: b-2abc28a
+pullPolicy: IfNotPresent
+
+# Number of replicas
+replicas: 2
+
+# Service
+service:
+  type: ClusterIP
+  httpPort: 80
+
+# Resources
+memoryRequest: 256Mi
+memoryLimit: 512Mi
+
+# Ingress
+ingress:
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  hostname: example.mmorejon.io

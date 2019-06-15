@@ -1,9 +1,0 @@
----
-- name: setup systems
-  hosts: all
-  become: True
-  roles:
-    - role: "nickjj.user"
-      tags: [user]
-    - role: "nickjj.docker"
-      tags: [docker]
