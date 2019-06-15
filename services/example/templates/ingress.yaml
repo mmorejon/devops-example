@@ -1,9 +1,9 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ template "python.fullname" . }}
+  name: {{ template "example.fullname" . }}
   labels:
-    app: {{ template "python.name" . }}
+    app: {{ template "example.name" . }}
     instance: {{ .Release.Name }}
 {{- with .Values.ingress.annotations }}
   annotations:
@@ -11,10 +11,10 @@ metadata:
 {{- end }}
 spec:
   rules:
-    - host: {{ template "python.fullname" . }}-cluster.{{ .Values.ingress.baseHost }}
+    - host: {{ .Values.ingress.host }}
       http:
         paths:
           - path: /
             backend:
-              serviceName: {{ template "python.fullname" . }}
+              serviceName: {{ template "example.fullname" . }}
               servicePort: http

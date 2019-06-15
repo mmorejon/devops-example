@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "python.fullname" . }}
+  name: {{ template "example.fullname" . }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -9,5 +9,5 @@ spec:
     protocol: TCP
     port: {{ .Values.service.httpPort }}
   selector:
-    app: {{ template "python.name" . }}
+    app: {{ template "example.name" . }}
     project: devops

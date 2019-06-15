@@ -19,7 +19,6 @@ memoryLimit: 512Mi
 
 # Ingress
 ingress:
-  enabled: true
   annotations:
     kubernetes.io/ingress.class: nginx
-  baseHost: mmorejon.io
+  hostname: example.mmorejon.io

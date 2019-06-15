@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ template "python.fullname" . }}
+  name: {{ template "example.fullname" . }}
   labels:
-    app: {{ template "python.name" . }}
+    app: {{ template "example.name" . }}
     project: devops
     release: {{ .Release.Name }}
 spec:
   replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
-      app: {{ template "python.name" . }}
+      app: {{ template "example.name" . }}
       project: devops
   template:
     metadata:
       labels:
-        app: {{ template "python.name" . }}
+        app: {{ template "example.name" . }}
         project: devops
     spec:
       containers:
