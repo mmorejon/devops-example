@@ -3,7 +3,7 @@
 variable "do_token" {}
 
 variable "domain_ip" {
-  default = "188.166.132.144"
+  default = "178.128.139.51"
 }
 
 # Configure the DigitalOcean Provider
@@ -11,22 +11,22 @@ provider "digitalocean" {
   token = "${var.do_token}"
 }
 
-# resource "digitalocean_ssh_key" "do" {
-#   name       = "do ssh"
-#   public_key = "${file("~/.ssh/ssh_do.pub")}"
-# }
+resource "digitalocean_ssh_key" "do" {
+  name       = "do ssh"
+  public_key = "${file("~/.ssh/ssh_do.pub")}"
+}
 
-# resource "digitalocean_domain" "mmorejon" {
-#   name       = "mmorejon.io"
-#   ip_address = "${var.domain_ip}"
-# }
+resource "digitalocean_domain" "mmorejon" {
+  name       = "mmorejon.io"
+  ip_address = "${var.domain_ip}"
+}
 
-# resource "digitalocean_record" "jenkins" {
-#   domain = "${digitalocean_domain.mmorejon.name}"
-#   type   = "CNAME"
-#   name   = "jenkins"
-#   value  = "@"
-# }
+resource "digitalocean_record" "jenkins" {
+  domain = "${digitalocean_domain.mmorejon.name}"
+  type   = "CNAME"
+  name   = "jenkins"
+  value  = "@"
+}
 
 resource "digitalocean_record" "example" {
   domain = "${digitalocean_domain.mmorejon.name}"
@@ -43,7 +43,7 @@ resource "digitalocean_kubernetes_cluster" "example" {
   node_pool {
     name       = "worker-pool"
     size       = "s-2vcpu-2gb"
-    node_count = 1
+    node_count = 3
   }
 }
 
