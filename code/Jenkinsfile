@@ -50,7 +50,7 @@ pipeline {
                             ./services/example
                     """
                     // check rollout status
-                    sh "kubectl rollout status deployment example"
+                    sh "kubectl -n default rollout status deployment example"
                 }
             }
         }
