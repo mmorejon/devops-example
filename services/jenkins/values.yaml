@@ -151,11 +151,14 @@ master:
 
   # List of plugins to be install during Jenkins master start
   installPlugins:
-    - kubernetes:1.15.5
+    - kubernetes:1.16.0
     - workflow-aggregator:2.6
     - credentials-binding:1.19
     - git:3.10.0
-    - blueocean:1.16.0
+    - blueocean:1.17.0
+    - greenballs:1.15
+    - prometheus:2.0.0
+    - kubernetes-cli:1.6.0
 
   # Enable to always override the installed plugins with the values of 'master.installPlugins' on upgrade or redeployment.
   # overwritePlugins: true
@@ -329,8 +332,8 @@ master:
 
 agent:
   enabled: true
-  image: "jenkins/jnlp-slave"
-  imageTag: "3.27-1"
+  image: "mmorejon/jnlp-slave"
+  imageTag: "v0.2.2"
   customJenkinsLabels: []
   # name of the secret to be used for image pulling
   imagePullSecretName:
@@ -341,13 +344,13 @@ agent:
       cpu: "200m"
       memory: "256Mi"
     limits:
-      cpu: "200m"
-      memory: "256Mi"
+      cpu: "500m"
+      memory: "512Mi"
   # You may want to change this to true while testing a new image
   alwaysPullImage: false
   # Controls how slave pods are retained after the Jenkins build completes
   # Possible values: Always, Never, OnFailure
-  podRetention: "Never"
+  podRetention: "OnFailure"
   # You can define the volumes that you want to mount for this container
   # Allowed types are: ConfigMap, EmptyDir, HostPath, Nfs, Pod, Secret
   # Configure the attributes as they appear in the corresponding Java class for that type
@@ -357,9 +360,9 @@ agent:
   # - name: PATH
   #   value: /usr/local/bin
   volumes:
-  # - type: Secret
-  #   secretName: mysecret
-  #   mountPath: /var/myapp/mysecret
+    - type: HostPath
+      hostPath: /var/run/docker.sock
+      mountPath: /var/run/docker.sock
   nodeSelector: {}
   # Key Value selectors. Ex:
   # jenkins-agent: v1
