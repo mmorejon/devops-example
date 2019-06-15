@@ -5,7 +5,8 @@ pipeline {
                 script: "printf \$(git rev-parse --short ${GIT_COMMIT})",
                 returnStdout: true
         )
-        IMAGE_NAME = "mmorejon/devops-python:b-${GIT_COMMIT_SHORT}"
+        IMAGE_TAG= "b-${GIT_COMMIT_SHORT}"
+        IMAGE_NAME = "mmorejon/devops-python:${IMAGE_TAG}"
         INSTANCE_NUMBER = 3
     }
     options {
@@ -42,13 +43,13 @@ pipeline {
                     sh """
                         helm upgrade \
                             --install \
-                            devops-python \
-                            --set imageTag=${IMAGE_NAME} \
+                            example \
+                            --set imageTag=${IMAGE_TAG} \
                             --set replicas=${INSTANCE_NUMBER} \
                             ./services/example
                     """
                     // check rollout status
-                    sh "kubectl rollout status deployment devops-python"
+                    sh "kubectl rollout status deployment example"
                 }
             }
         }
