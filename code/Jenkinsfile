@@ -29,24 +29,23 @@ pipeline {
         }
         stage('publish') {
             steps {
-                withDockerRegistry(credentialsId: 'HUB_MMOREJON', url: "https://index.docker.io/v1/") {
+                withDockerRegistry(credentialsId: 'HUB_USER', url: "https://index.docker.io/v1/") {
                     sh "docker image push '${IMAGE_NAME}'"
                 }
             }
         }
         stage('deploy') {
-            when { branch 'master' }
+            // when { branch 'master' }
             steps {
                 // cluster deployment
                 withKubeConfig(credentialsId: 'DO_CLUSTER' ) {
                     sh """
                         helm upgrade \
                             --install \
-                            -f ./cluster/example/values.yaml \
+                            devops-python \
                             --set imageTag=${IMAGE_NAME} \
                             --set replicas=${INSTANCE_NUMBER} \
-                            devops-python \
-                            ./cluster/example
+                            ./services/example
                     """
                     // check rollout status
                     sh "kubectl rollout status deployment devops-python"
