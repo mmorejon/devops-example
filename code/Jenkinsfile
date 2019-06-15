@@ -7,7 +7,7 @@ pipeline {
         )
         IMAGE_TAG= "b-${GIT_COMMIT_SHORT}"
         IMAGE_NAME = "mmorejon/devops-python:${IMAGE_TAG}"
-        INSTANCE_NUMBER = 3
+        INSTANCE_NUMBER = 2
     }
     options {
         buildDiscarder(logRotator(numToKeepStr: '5' ))
