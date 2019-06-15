@@ -46,6 +46,7 @@ pipeline {
                             example \
                             --set imageTag=${IMAGE_TAG} \
                             --set replicas=${INSTANCE_NUMBER} \
+                            --namespace default \
                             ./services/example
                     """
                     // check rollout status
