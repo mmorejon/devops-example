@@ -30,7 +30,8 @@ install:
 
 status:
 	watch "kubectl --kubeconfig example-kubeconfig.yaml get nodes && \
-		echo && kubectl --kubeconfig example-kubeconfig.yaml get pods --all-namespaces"
+		echo && kubectl --kubeconfig example-kubeconfig.yaml get pods --all-namespaces && \
+		echo && kubectl --kubeconfig example-kubeconfig.yaml get ing --all-namespaces"
 
 delete:
 	helm --kubeconfig example-kubeconfig.yaml delete --purge nginx-ingres
