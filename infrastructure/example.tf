@@ -16,24 +16,24 @@ resource "digitalocean_ssh_key" "do" {
   public_key = "${file("~/.ssh/ssh_do.pub")}"
 }
 
-resource "digitalocean_domain" "mmorejon" {
-  name       = "mmorejon.io"
-  ip_address = "${var.domain_ip}"
-}
+# resource "digitalocean_domain" "mmorejon" {
+#   name       = "mmorejon.io"
+#   ip_address = "${var.domain_ip}"
+# }
 
-resource "digitalocean_record" "jenkins" {
-  domain = "${digitalocean_domain.mmorejon.name}"
-  type   = "CNAME"
-  name   = "jenkins"
-  value  = "@"
-}
+# resource "digitalocean_record" "jenkins" {
+#   domain = "${digitalocean_domain.mmorejon.name}"
+#   type   = "CNAME"
+#   name   = "jenkins"
+#   value  = "@"
+# }
 
-resource "digitalocean_record" "example" {
-  domain = "${digitalocean_domain.mmorejon.name}"
-  type   = "CNAME"
-  name   = "example"
-  value  = "@"
-}
+# resource "digitalocean_record" "example" {
+#   domain = "${digitalocean_domain.mmorejon.name}"
+#   type   = "CNAME"
+#   name   = "example"
+#   value  = "@"
+# }
 
 resource "digitalocean_kubernetes_cluster" "example" {
   name    = "example"
