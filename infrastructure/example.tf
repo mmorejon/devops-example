@@ -38,7 +38,7 @@ resource "digitalocean_record" "example" {
 resource "digitalocean_kubernetes_cluster" "example" {
   name    = "example"
   region  = "ams3"
-  version = "1.14.1-do.3"
+  version = "1.14.1-do.4"
 
   node_pool {
     name       = "worker-pool"
