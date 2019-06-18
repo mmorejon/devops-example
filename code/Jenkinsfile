@@ -36,7 +36,6 @@ pipeline {
             }
         }
         stage('deploy') {
-            // when { branch 'master' }
             steps {
                 // cluster deployment
                 withKubeConfig(credentialsId: 'DO_CLUSTER' ) {
