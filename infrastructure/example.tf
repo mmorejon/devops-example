@@ -11,11 +11,6 @@ provider "digitalocean" {
   token = "${var.do_token}"
 }
 
-resource "digitalocean_ssh_key" "do" {
-  name       = "do ssh"
-  public_key = "${file("~/.ssh/ssh_do.pub")}"
-}
-
 # resource "digitalocean_domain" "mmorejon" {
 #   name       = "mmorejon.io"
 #   ip_address = "${var.domain_ip}"
@@ -37,7 +32,7 @@ resource "digitalocean_ssh_key" "do" {
 
 resource "digitalocean_kubernetes_cluster" "example" {
   name    = "example"
-  region  = "ams3"
+  region  = "sfo2"
   version = "1.14.1-do.4"
 
   node_pool {
