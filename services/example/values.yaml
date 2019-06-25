@@ -6,7 +6,7 @@ imageTag: b-2abc28a
 pullPolicy: IfNotPresent
 
 # Number of replicas
-replicas: 2
+replicas: 3
 
 # Service
 service:
